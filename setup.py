@@ -2,9 +2,11 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import sys
 import setuptools
+import subprocess
 
 __version__ = '1.2.3'
 
+SOX_PREFIX = subprocess.check_output(['brew', '--prefix', 'sox'], encoding='utf8').strip()
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
@@ -27,6 +29,10 @@ ext_modules = [
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
+            f"{SOX_PREFIX}/include",
+        ],
+        library_dirs=[
+            f"{SOX_PREFIX}/lib",
         ],
         language='c++'
     ),
